@@ -1,45 +1,52 @@
 import React, { useState } from "react";
 import "./style.css";
 
-const Modal = ({ data, datas, handleData }) => {
+const Modal = ({ data, datas, handleChangeData, handleRemoveData }) => {
   const [disableEdit, setDisableEdit] = useState(true);
-  const [changedArray, setChangedArray] = useState([]);
+  const [changedValue, setChangedValue] = useState(null);
 
   const handleCheck = () => {
-    const newArray = datas?.map((x) => {
-      if (x.id === data.id) {
-        if (x.status === 0) x.status = 1;
-        else x.status = 0;
+    if (changedValue) {
+      if (data?.status === 0) {
+        setChangedValue({ ...changedValue, status: 1 });
+      } else {
+        setChangedValue({ ...changedValue, status: 0 });
       }
-      return x;
-    });
-    setChangedArray(newArray);
+    } else {
+      if (data?.status === 0) {
+        setChangedValue({ ...data, status: 1 });
+      } else {
+        setChangedValue({ ...data, status: 0 });
+      }
+    }
   };
 
   const handleChangeTitle = (e) => {
-    const newArray = datas?.map((x) => {
-      if (x.id === data.id) {
-        x.title = e.target.value;
-      }
-      return x;
-    });
-
-    setChangedArray(newArray);
+    if (changedValue) {
+      setChangedValue({ ...changedValue, title: e.target.value });
+    } else {
+      setChangedValue({ ...data, title: e.target.value });
+    }
   };
 
   const handleChangeDesc = (e) => {
-    const newArray = datas?.map((x) => {
-      if (x.id === data.id) x.description = e.target.value;
-      return x;
-    });
-    setChangedArray(newArray);
+    if (changedValue) {
+      setChangedValue({ ...changedValue, description: e.target.value });
+    } else {
+      setChangedValue({ ...data, description: e.target.value });
+    }
+  };
+
+  const handleStatus = () => {
+    if (changedValue) {
+      return changedValue?.status === 0 ? "Belum Selesai" : "Sudah Selesai";
+    } else return data?.status === 0 ? "Belum Selesai" : "Sudah Selesai";
   };
 
   return (
     <div
       className="modal fade"
       id="staticBackdrop"
-      // data-bs-backdrop="static"//"static"
       // data-bs-keyboard="false"
       tabIndex="-1"
       aria-labelledby="staticBackdropLabel"
@@ -55,7 +62,7 @@ const Modal = ({ data, datas, handleData }) => {
                 placeholder="Title"
                 aria-label="Username"
                 aria-describedby="basic-addon1"
-                value={data?.title}
+                value={changedValue?.title ?? data?.title}
                 disabled={disableEdit}
                 onChange={(e) => handleChangeTitle(e)}
               />
@@ -74,7 +81,7 @@ const Modal = ({ data, datas, handleData }) => {
                 className="form-control"
                 id="exampleFormControlTextarea1"
                 rows="3"
-                value={data?.description}
+                value={changedValue?.description ?? data?.description}
                 disabled={disableEdit}
                 onChange={(e) => handleChangeDesc(e)}
               ></textarea>
@@ -86,7 +93,7 @@ const Modal = ({ data, datas, handleData }) => {
                 type="checkbox"
                 value=""
                 id="flexCheckCheckedDisabled"
-                checked={data?.status === 1}
+                checked={handleStatus() === "Sudah Selesai"}
                 disabled={disableEdit}
                 onClick={handleCheck}
               />
@@ -95,7 +102,7 @@ const Modal = ({ data, datas, handleData }) => {
                 className="form-check-label"
                 htmlFor="flexCheckCheckedDisabled"
               >
-                {data?.status === 0 ? "Belum Selesai" : "Sudah Selesai"}
+                {handleStatus()}
               </label>
             </div>
           </div>
@@ -104,10 +111,7 @@ const Modal = ({ data, datas, handleData }) => {
               <button
                 type="button"
                 className="btn btn-warning"
-                onClick={() => {
-                  setDisableEdit(false);
-                  setChangedArray(datas);
-                }}
+                onClick={() => setDisableEdit(false)}
               >
                 EDIT
               </button>
@@ -117,7 +121,9 @@ const Modal = ({ data, datas, handleData }) => {
                 className="btn btn-warning"
                 onClick={() => {
                   setDisableEdit(true);
-                  handleData(changedArray);
+                  handleChangeData(changedValue);
+                  console.log(changedValue);
+                  setChangedValue(null);
                 }}
                 data-bs-dismiss="modal"
               >
@@ -129,10 +135,7 @@ const Modal = ({ data, datas, handleData }) => {
               type="button"
               className="btn btn-danger"
               disabled={data?.status === 1 || !disableEdit}
-              onClick={() => {
-                console.log(data);
-                handleData(data);
-              }}
+              onClick={() => handleRemoveData(data)}
               data-bs-dismiss="modal"
             >
               Delete

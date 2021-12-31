@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import Modal from "../../components/modal";
 import RenderTable from "../../components/render-table";
 import { useNavigate } from "react-router";
-import { removeTask } from "../../actions";
+import { removeTask, editTask } from "../../actions";
 
 const TodoList = (props) => {
   const [activeTodo, setActiveTodo] = useState(null);
@@ -44,7 +44,8 @@ const TodoList = (props) => {
         <Modal
           data={activeTodo}
           datas={props.task}
-          handleData={props.removeTask}
+          handleRemoveData={props.removeTask}
+          handleChangeData={props.editTask}
         />
       </>
     </div>
@@ -59,6 +60,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   removeTask,
+  editTask,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
