@@ -31,7 +31,7 @@ function App() {
         </div>
         <div className="col-md-6">
           <RenderTable
-            title={"SUDAH SELESAI SELESAI"}
+            title={"SUDAH SELESAI"}
             status={1}
             datas={data}
             onClickTR={setActiveTodo}

@@ -3,7 +3,7 @@ import "./style.css";
 import { handleSortingDate } from "../../utils";
 
 const RenderTable = ({ datas, title, status, onClickTR }) => {
-  let count = 0;
+  const filteredDatas = datas?.filter((x) => x.status === status);
   status === 0
     ? handleSortingDate(datas, "asc")
     : handleSortingDate(datas, "desc");
@@ -25,31 +25,26 @@ const RenderTable = ({ datas, title, status, onClickTR }) => {
           </tr>
         </thead>
         <tbody>
-          {datas?.map((data, i) => {
-            if (data.status === status) {
-              count++;
-              return (
-                <>
-                  <tr
-                    className="table-row"
-                    key={i}
-                    onClick={() => onClickTR(data) ?? null}
-                    data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"
-                  >
-                    <th>{count}</th>
-                    <td>{data.title}</td>
-                    <td>{data.createdAt}</td>
-                  </tr>
-                </>
-              );
-            } else {
-              return null;
-            }
+          {filteredDatas?.map((data, i) => {
+            return (
+              <>
+                <tr
+                  className="table-row"
+                  key={i}
+                  onClick={() => onClickTR(data) ?? null}
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                >
+                  <th>{i + 1}</th>
+                  <td>{data.title}</td>
+                  <td>{data.createdAt}</td>
+                </tr>
+              </>
+            );
           })}
-          {count === 0 ? (
+          {filteredDatas?.length === 0 || !filteredDatas ? (
             <tr>
-              <td colspan="3" className="text-center">
+              <td colSpan="3" className="text-center">
                 Data tidak ada
               </td>
             </tr>
