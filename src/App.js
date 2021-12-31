@@ -39,9 +39,9 @@ function App() {
         </div>
       </div>
       <Modal
-        title={activeTodo?.title}
-        description={activeTodo?.description}
-        status={activeTodo?.status}
+        data={activeTodo}
+        datas={data}
+        handleData={setData}
       />
     </div>
   );

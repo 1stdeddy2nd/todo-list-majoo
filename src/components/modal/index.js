@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 
-const Modal = ({ title, description, status }) => {
+const Modal = ({ data, datas, handleData }) => {
   return (
     <div
       className="modal fade"
@@ -14,7 +14,7 @@ const Modal = ({ title, description, status }) => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
-              {title}
+              {data?.title}
             </h5>
             <button
               type="button"
@@ -23,7 +23,7 @@ const Modal = ({ title, description, status }) => {
               aria-label="Close"
             ></button>
           </div>
-          <div className="modal-body">{description}</div>
+          <div className="modal-body">{data?.description}</div>
           <div className="modal-footer">
             <button
               type="button"
@@ -34,7 +34,9 @@ const Modal = ({ title, description, status }) => {
             <button
               type="button"
               className="btn btn-danger"
-              disabled={status === 1}
+              disabled={data?.status === 1}
+              onClick={() => handleData(datas.filter(x => x.id !== data.id))}
+              data-bs-dismiss="modal"
             >
               Delete
             </button>
