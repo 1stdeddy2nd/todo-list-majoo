@@ -16,7 +16,10 @@ const AddTask = (props) => {
   };
   const [formValue, setFormValue] = React.useState({
     status: 0,
-    id: props.task.sort()[props.task.length - 1].id + 1, // take highest id everytime create new task
+    id:
+      props.task.length !== 0
+        ? props.task?.sort()[props.task.length - 1]?.id + 1
+        : 1, // take highest id everytime create new task
     createdAt: time(),
   });
   const navigate = useNavigate();
