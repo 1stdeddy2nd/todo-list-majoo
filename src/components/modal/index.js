@@ -18,9 +18,12 @@ const Modal = ({ data, datas, handleData }) => {
 
   const handleChangeTitle = (e) => {
     const newArray = datas?.map((x) => {
-      if (x.id === data.id) x.title = e.target.value;
+      if (x.id === data.id) {
+        x.title = e.target.value;
+      }
       return x;
     });
+
     setChangedArray(newArray);
   };
 
@@ -35,9 +38,11 @@ const Modal = ({ data, datas, handleData }) => {
   return (
     <div
       className="modal fade"
-      id="exampleModal"
+      id="staticBackdrop"
+      // data-bs-backdrop="static"//"static"
+      // data-bs-keyboard="false"
       tabIndex="-1"
-      aria-labelledby="exampleModalLabel"
+      aria-labelledby="staticBackdropLabel"
       aria-hidden="true"
     >
       <div className="modal-dialog">
@@ -66,7 +71,7 @@ const Modal = ({ data, datas, handleData }) => {
             <h6>Deskripsi</h6>
             <p>
               <textarea
-                class="form-control"
+                className="form-control"
                 id="exampleFormControlTextarea1"
                 rows="3"
                 value={data?.description}
@@ -99,7 +104,10 @@ const Modal = ({ data, datas, handleData }) => {
               <button
                 type="button"
                 className="btn btn-warning"
-                onClick={() => setDisableEdit(false)}
+                onClick={() => {
+                  setDisableEdit(false);
+                  setChangedArray(datas);
+                }}
               >
                 EDIT
               </button>
@@ -120,8 +128,11 @@ const Modal = ({ data, datas, handleData }) => {
             <button
               type="button"
               className="btn btn-danger"
-              disabled={data?.status === 1}
-              onClick={() => handleData(datas.filter((x) => x.id !== data.id))}
+              disabled={data?.status === 1 || !disableEdit}
+              onClick={() => {
+                console.log(data);
+                handleData(data);
+              }}
               data-bs-dismiss="modal"
             >
               Delete

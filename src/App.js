@@ -1,60 +1,59 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
-// import axios from "axios";
+import TodoList from "./screens/todo-list";
+import AddTask from "./screens/add-task";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { handleGetAPI, urlInit } from "./utils";
+import { addTask } from "./actions";
 import { connect } from "react-redux";
-import Modal from "./components/modal";
-import RenderTable from "./components/render-table";
-import { handleGetAPI } from "./utils";
 
-function App() {
-  const [data, setData] = useState(null);
-  const [activeTodo, setActiveTodo] = useState(null);
-  const url =
-  "https://virtserver.swaggerhub.com/hanabyan/todo/1.0.0/to-do-list";
-
+const App = (props) => {
+  const [spinner, setSpinner] = React.useState(false);
+  React.useEffect(() => {
+    handleGetAPI(urlInit, setSpinner)
+      .then((response) => {
+        response.forEach((element) => {
+          props.addTask(element);
+        });
+      })
+      .catch((e) => console.error(e.message));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div>
-      <h1 className="text-center">TODO LIST</h1>
-      <div className="all-center">
-        <button onClick={() => handleGetAPI(url, setData)}>initialize data</button>
-      </div>
-      <div className="row m-0 p-0">
-        <div className="col-md-6">
-          <RenderTable
-            title={"BELUM SELESAI"}
-            status={0}
-            datas={data}
-            onClickTR={setActiveTodo}
-          />
+      {!spinner ? (
+        <div>
+          <Router>
+            <Routes>
+              <Route
+                path="/todo-list"
+                element={<TodoList />}
+              />
+              <Route path="/add-task" element={<AddTask />} />
+            </Routes>
+          </Router>
         </div>
-        <div className="col-md-6">
-          <RenderTable
-            title={"SUDAH SELESAI"}
-            status={1}
-            datas={data}
-            onClickTR={setActiveTodo}
-          />
+      ) : (
+        <div className="all-center">
+          <div className="spinner-border mt-2" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </div>
-      </div>
-      <Modal
-        data={activeTodo}
-        datas={data}
-        handleData={setData}
-      />
+      )}
     </div>
   );
-}
+};
 
 const mapStateToProps = (state) => {
   return {
-    state: state,
+    task: state,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return null;
+const mapDispatchToProps = {
+  addTask,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
