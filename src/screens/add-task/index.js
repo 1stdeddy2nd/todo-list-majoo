@@ -57,7 +57,7 @@ const AddTask = (props) => {
         className="btn btn-primary"
         onClick={() => {
           props.addTask(formValue);
-          navigate("/todo-list");
+          navigate("/");
         }}
         disabled={!formValue?.title || !formValue?.description}
       >

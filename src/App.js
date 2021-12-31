@@ -28,7 +28,7 @@ const App = (props) => {
           <Router>
             <Routes>
               <Route
-                path="/todo-list"
+                path=""
                 element={<TodoList />}
               />
               <Route path="/add-task" element={<AddTask />} />
