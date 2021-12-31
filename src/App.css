@@ -14,3 +14,8 @@
 .App {
   min-height: 100vh;
 }
+
+.table-row:hover{
+  background-color: rgb(218, 218, 218);
+  cursor: pointer;
+}
